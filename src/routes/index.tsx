@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama, ArrowRight } from "lucide-react";
+import { BlogSection } from "@/components/BlogSection";
+import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -149,22 +150,8 @@ function Index() {
         </section>
 
         {/* Blog & Research Writings */}
-        <section className="mt-24">
-          <div className="mb-10 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-dark sm:text-4xl">
-              Blog & Research Writings
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              Thoughts on software, research, and emerging technology.
-            </p>
-          </div>
+        <BlogSection />
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {blogPosts.map((post) => (
-              <BlogCard key={post.slug} post={post} />
-            ))}
-          </div>
-        </section>
 
         {/* Footer */}
         <footer className="mt-28 border-t border-border pt-10 text-center">
@@ -255,60 +242,3 @@ function ExtracurricularCard({
 }
 
 // Easy-to-update blog posts array. Add, remove, or edit entries here.
-const blogPosts: BlogPost[] = [
-  {
-    slug: "teknofest-lessons",
-    title: "Lessons from 3 Years at TEKNOFEST",
-    summary:
-      "What leading Python-based engineering projects taught me about system architecture, teamwork, and rapid iteration under pressure.",
-    date: "Aug 2026",
-    href: "#",
-  },
-  {
-    slug: "radon-research",
-    title: "Building Research Software for a TÜBİTAK Project",
-    summary:
-      "How I engineered data pipelines and analysis workflows for a Radon gas environmental-effects study evaluated at the national level.",
-    date: "Jul 2026",
-    href: "#",
-  },
-  {
-    slug: "cs50p-health-app",
-    title: "From CS50P to a Digital Health App",
-    summary:
-      "Reflecting on my Harvard CS50P capstone: designing algorithms, handling database operations, and shipping a real-world health tool.",
-    date: "Jun 2026",
-    href: "#",
-  },
-];
-
-type BlogPost = {
-  slug: string;
-  title: string;
-  summary: string;
-  date: string;
-  href: string;
-};
-
-function BlogCard({ post }: { post: BlogPost }) {
-  return (
-    <article className="glass-card group flex flex-col rounded-2xl p-6 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-emerald-bright/30 hover:shadow-lg">
-      <div className="mb-4 flex items-center justify-between">
-        <span className="tag-pill">{post.date}</span>
-      </div>
-      <h3 className="text-xl font-semibold leading-snug text-slate-dark">
-        {post.title}
-      </h3>
-      <p className="mt-3 flex-grow leading-relaxed text-muted-foreground">
-        {post.summary}
-      </p>
-      <a
-        href={post.href}
-        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-emerald-rich transition-colors hover:text-emerald-deep"
-      >
-        Read Article
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-      </a>
-    </article>
-  );
-}
