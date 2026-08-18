@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BlogSection } from "@/components/BlogSection";
-import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama, ArrowRight } from "lucide-react";
+import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
