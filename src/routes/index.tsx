@@ -148,6 +148,24 @@ function Index() {
           </div>
         </section>
 
+        {/* Blog & Research Writings */}
+        <section className="mt-24">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-dark sm:text-4xl">
+              Blog & Research Writings
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Thoughts on software, research, and emerging technology.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {blogPosts.map((post) => (
+              <BlogCard key={post.slug} post={post} />
+            ))}
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="mt-28 border-t border-border pt-10 text-center">
           <p className="text-sm text-muted-foreground">
@@ -158,6 +176,7 @@ function Index() {
     </main>
   );
 }
+
 
 function ProjectCard({
   tag,
