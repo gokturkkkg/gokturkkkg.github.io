@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama, MessageCircle } from "lucide-react";
+import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
