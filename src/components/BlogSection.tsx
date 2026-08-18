@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { ArrowRight, Search, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, Search, X } from "lucide-react";
 import { postsData, postCategories, type BlogPost, type PostBlock } from "@/data/posts";
 
 const PAGE_SIZE = 6;
@@ -140,9 +140,20 @@ export function BlogSection() {
 }
 
 function PostModal({ post, onClose }: { post: BlogPost; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-dark/50 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-dark/50 p-0 backdrop-blur-sm sm:p-8"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -150,16 +161,26 @@ function PostModal({ post, onClose }: { post: BlogPost; onClose: () => void }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="animate-fade-in glass-card relative my-4 w-full max-w-3xl rounded-2xl p-6 shadow-xl sm:p-10"
+        className="animate-fade-in glass-card relative my-0 w-full max-w-3xl rounded-none p-6 shadow-xl sm:my-4 sm:rounded-2xl sm:p-12"
       >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close article"
-          className="absolute top-4 right-4 rounded-full border border-border bg-card/80 p-2 text-muted-foreground transition-all hover:rotate-90 hover:border-emerald-bright/40 hover:text-emerald-rich"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="sticky top-0 z-10 -mx-6 mb-6 flex items-center justify-between gap-3 border-b border-border bg-card/85 px-6 py-3 backdrop-blur-md sm:-mx-12 sm:px-12">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-bright/40 bg-card/70 px-4 py-2 text-sm font-semibold text-emerald-rich transition-all duration-300 hover:-translate-x-0.5 hover:bg-emerald-rich hover:text-primary-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Blog
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close article"
+            className="rounded-full border border-border bg-card/80 p-2 text-muted-foreground transition-all hover:rotate-90 hover:border-emerald-bright/40 hover:text-emerald-rich"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <span className="tag-pill">{post.category}</span>
@@ -168,30 +189,46 @@ function PostModal({ post, onClose }: { post: BlogPost; onClose: () => void }) {
           </time>
         </div>
 
-        <h2 className="text-3xl font-bold tracking-tight text-slate-dark">{post.title}</h2>
-        <p className="mt-3 leading-relaxed text-muted-foreground">{post.summary}</p>
+        <h2 className="text-3xl leading-tight font-bold tracking-tight text-balance text-slate-dark sm:text-4xl">
+          {post.title}
+        </h2>
+        <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{post.summary}</p>
 
-        <div className="mt-8 space-y-5 border-t border-border pt-8">
+        <div className="mx-auto mt-8 max-w-[68ch] space-y-6 border-t border-border pt-8 text-[1.0625rem]">
           {post.content.map((block, i) => (
             <Block key={i} block={block} />
           ))}
+        </div>
+
+        <div className="mt-12 flex justify-center border-t border-border pt-8">
+          <button
+            type="button"
+            onClick={onClose}
+            className="btn-emerald hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Blog
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
+
 function Block({ block }: { block: PostBlock }) {
   switch (block.type) {
     case "heading":
-      return <h3 className="pt-2 text-xl font-semibold text-slate-dark">{block.text}</h3>;
+      return (
+        <h3 className="pt-4 text-2xl font-bold tracking-tight text-slate-dark">{block.text}</h3>
+      );
     case "paragraph":
-      return <p className="leading-relaxed text-muted-foreground">{block.text}</p>;
+      return <p className="leading-[1.85] text-muted-foreground">{block.text}</p>;
     case "list":
       return (
-        <ul className="list-inside list-disc space-y-2 text-muted-foreground">
+        <ul className="list-outside list-disc space-y-2 pl-5 marker:text-emerald-bright text-muted-foreground">
           {block.items.map((item, i) => (
-            <li key={i} className="leading-relaxed">
+            <li key={i} className="leading-[1.85] pl-1">
               {item}
             </li>
           ))}
@@ -199,17 +236,25 @@ function Block({ block }: { block: PostBlock }) {
       );
     case "quote":
       return (
-        <blockquote className="border-l-4 border-emerald-bright/60 pl-4 text-lg leading-relaxed font-medium text-slate-dark italic">
+        <blockquote className="rounded-r-xl border-l-4 border-emerald-bright/60 bg-mint-soft/40 py-3 pr-4 pl-5 text-lg leading-relaxed font-medium text-slate-dark italic">
           {block.text}
         </blockquote>
       );
     case "code":
       return (
-        <pre className="overflow-x-auto rounded-xl border border-border bg-slate-dark/95 p-4 text-sm leading-relaxed">
-          <code className="font-mono text-mint">{block.code}</code>
-        </pre>
+        <figure className="overflow-hidden rounded-xl border border-border bg-slate-dark/95">
+          {block.language && (
+            <figcaption className="border-b border-white/10 px-4 py-2 font-mono text-xs tracking-wide text-mint/70 uppercase">
+              {block.language}
+            </figcaption>
+          )}
+          <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
+            <code className="font-mono text-mint">{block.code}</code>
+          </pre>
+        </figure>
       );
     default:
       return null;
   }
 }
+
