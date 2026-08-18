@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BlogSection } from "@/components/BlogSection";
+import { PersonalSpotlight } from "@/components/PersonalSpotlight";
 import { Github, Linkedin, Trophy, Microscope, HeartPulse, Award, BookOpen, Dumbbell, Drama } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -148,6 +149,9 @@ function Index() {
             />
           </div>
         </section>
+
+        {/* Personal Spotlight */}
+        <PersonalSpotlight />
 
         {/* Blog & Research Writings */}
         <BlogSection />
