@@ -219,14 +219,16 @@ function PostModal({ post, onClose }: { post: BlogPost; onClose: () => void }) {
 function Block({ block }: { block: PostBlock }) {
   switch (block.type) {
     case "heading":
-      return <h3 className="pt-2 text-xl font-semibold text-slate-dark">{block.text}</h3>;
+      return (
+        <h3 className="pt-4 text-2xl font-bold tracking-tight text-slate-dark">{block.text}</h3>
+      );
     case "paragraph":
-      return <p className="leading-relaxed text-muted-foreground">{block.text}</p>;
+      return <p className="leading-[1.85] text-muted-foreground">{block.text}</p>;
     case "list":
       return (
-        <ul className="list-inside list-disc space-y-2 text-muted-foreground">
+        <ul className="list-outside list-disc space-y-2 pl-5 marker:text-emerald-bright text-muted-foreground">
           {block.items.map((item, i) => (
-            <li key={i} className="leading-relaxed">
+            <li key={i} className="leading-[1.85] pl-1">
               {item}
             </li>
           ))}
@@ -234,17 +236,25 @@ function Block({ block }: { block: PostBlock }) {
       );
     case "quote":
       return (
-        <blockquote className="border-l-4 border-emerald-bright/60 pl-4 text-lg leading-relaxed font-medium text-slate-dark italic">
+        <blockquote className="rounded-r-xl border-l-4 border-emerald-bright/60 bg-mint-soft/40 py-3 pr-4 pl-5 text-lg leading-relaxed font-medium text-slate-dark italic">
           {block.text}
         </blockquote>
       );
     case "code":
       return (
-        <pre className="overflow-x-auto rounded-xl border border-border bg-slate-dark/95 p-4 text-sm leading-relaxed">
-          <code className="font-mono text-mint">{block.code}</code>
-        </pre>
+        <figure className="overflow-hidden rounded-xl border border-border bg-slate-dark/95">
+          {block.language && (
+            <figcaption className="border-b border-white/10 px-4 py-2 font-mono text-xs tracking-wide text-mint/70 uppercase">
+              {block.language}
+            </figcaption>
+          )}
+          <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
+            <code className="font-mono text-mint">{block.code}</code>
+          </pre>
+        </figure>
       );
     default:
       return null;
   }
 }
+
