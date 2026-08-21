@@ -34,13 +34,18 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Copy index.html to 404.html for SPA routing
-        run: cp dist/index.html dist/404.html
+      - name: Prepare SPA 404 Fallback
+        run: |
+          if [ -d ".output/public" ]; then
+            cp .output/public/index.html .output/public/404.html
+          elif [ -d "dist" ]; then
+            cp dist/index.html dist/404.html
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './.output/public'
 
       - name: Deploy to GitHub Pages
         id: deployment
